@@ -47,10 +47,7 @@ class FileView(APIView):
                                          name=request.data['file'].name,
                                          username_id=user_obj)
                     instance = file_serializer.save(file=request.data['file'])
-                    #if request.META['HTTP_NUM'] == 1:
-                        # x = SpcUser.objects.filter(username=request.user.username).get()
-                        # x.syncLock = 0
-                        # x.save()
+
                     if os.path.isfile(os.path.abspath(instance.file_url)):
                         f = open(os.path.abspath(instance.file_url), 'rb')
                         md5 = md5sum(f)

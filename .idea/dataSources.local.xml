@@ -2,12 +2,20 @@
 <project version="4">
   <component name="dataSourceStorageLocal">
     <data-source name="db" uuid="c9e0a2a4-4ab2-4715-876f-139b0e9f0e22">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" family="SQLITE" exact-version="0.0" />
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0.0" />
       <introspection-schemas>*:</introspection-schemas>
     </data-source>
     <data-source name="db [2]" uuid="e51d94e2-9485-4696-be20-0192da0dd47e">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" family="SQLITE" exact-version="0.0" />
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0.0" />
       <auth-required>false</auth-required>
+    </data-source>
+    <data-source name="Django default" uuid="ee523dde-83ed-422f-bf78-7a17ffe7b957">
+      <database-info product="SQLite" version="3.25.1" jdbc-version="2.1" driver-name="SQLite JDBC" driver-version="3.25.1" dbms="SQLITE" exact-version="3.25.1" exact-driver-version="3.25">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <auth-required>false</auth-required>
+      <introspection-schemas>*:@</introspection-schemas>
     </data-source>
   </component>
 </project>

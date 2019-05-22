@@ -32,7 +32,6 @@ logging.basicConfig(filename='SPC.log',
                     format='%(asctime)s %(message)s',
                     datefmt='%m/%d/%Y %I:%M:%S %p')
 
-
 paramalgo, paramkey = 'encryption_schema', 'key'
 
 if len(sys.argv) == 1:
@@ -40,20 +39,21 @@ if len(sys.argv) == 1:
     print("Team name: import teamName")
     exit(0)
 
-def check_key(scheme,key):
-    if (scheme == "AES"):
+
+def check_key(scheme, key):
+    if scheme == "AES":
         if (len(key) != 64):
             return False
-        try :
-            int(key,16)
+        try:
+            int(key, 16)
             return True
         except Exception as e:
             return False
-    if (scheme == "TripleDES"):
+    if scheme == "TripleDES":
         if (len(key) != 48):
             return False
-        try :
-            int(key,16)
+        try:
+            int(key, 16)
             return True
         except Exception as e:
             return False
@@ -61,20 +61,20 @@ def check_key(scheme,key):
     if (scheme == "AES"):
         if (len(key) != 32):
             return False
-        try :
-            int(key,16)
+        try:
+            int(key, 16)
             return True
         except Exception as e:
             return False
     pass
 
 
-def check_iv(scheme,key):
+def check_iv(scheme, key):
     if (scheme == "AES"):
         if (len(key) != 32):
             return False
-        try :
-            int(key,16)
+        try:
+            int(key, 16)
             return True
         except Exception as e:
             return False
@@ -106,12 +106,12 @@ def set_key(paramalgo, paramkey):
         data[paramalgo] = "RC4"
         algoselected = "RC4"
     inpu = input("Enter 'file' if you want to store the key in a file (recommended).\n"
-                    "Enter 'print' if you want the key to be printed out to terminal (not recommended)\n")
+                 "Enter 'print' if you want the key to be printed out to terminal (not recommended)\n")
     if inpu == "print":
         keyFile = None
     elif inpu == "file":
-        keyFile = os.path.join(data["home_folder"], "key.key")
-    else :
+        keyFile = os.path.join(data["home_dir"], "key.key")
+    else:
         print("Invalid Argument. Exiting...")
         exit(0)
     x = generate_key(algoselected, keyFile)
@@ -126,7 +126,7 @@ def set_key(paramalgo, paramkey):
     return [data[paramalgo], data[paramkey]]
 
 
-def store_key_file (file):
+def store_key_file(file):
     with open(config_file) as fhand:
         data = json.load(fhand)
     if (data.get("encryption_schema") == None):
@@ -137,59 +137,59 @@ def store_key_file (file):
                 break
             print("Invalid schema. Try again.")
         data["encryption_schema"] = inp
-    keyFile = os.path.join(data["home_folder"], "key.key")
-    with open(file,'rb') as f:
+    keyFile = os.path.join(data["home_dir"], "key.key")
+    with open(file, 'rb') as f:
         key = pickle.load(f)
         if (key.get('key') == None):
-            print ("Invalid File. Exiting...")
+            print("Invalid File. Exiting...")
             exit(0)
         if (key.get('iv') == None and inp != "RC4"):
             print("Invalid File. Exiting...")
             exit(0)
-    with open(keyFile,'wb') as fi:
-        pickle.dump(key,fi)
+    with open(keyFile, 'wb') as fi:
+        pickle.dump(key, fi)
     print("Key stored")
-    return inp,keyFile
+    return inp, keyFile
     pass
 
 
 def store_key():
     with open(config_file) as fhand:
         data = json.load(fhand)
-    keyFile = os.path.join(data["home_folder"], "key.key")
-    if (data.get("encryption_schema")==None):
-        print ("Specify Encryption :")
-        while(True):
+    keyFile = os.path.join(data["home_dir"], "key.key")
+    if (data.get("encryption_schema") == None):
+        print("Specify Encryption :")
+        while (True):
             inp = input();
             if (inp == "AES" or inp == "TripleDES" or inp == "RC4"):
                 break
             print("Invalid schema. Try again.")
         data["encryption_schema"] = inp
-    keyFile = os.path.join(data["home_folder"], "key.key")
+    keyFile = os.path.join(data["home_dir"], "key.key")
     dict = {}
     while (True):
         print("Enter the key :")
         keydash = input()
-        if (check_key(inp,keydash)):
+        if (check_key(inp, keydash)):
             keydash = keydash.encode('utf-8')
             break
-        else :
+        else:
             print("Wrong key. Kindly Try again.")
     dict["key"] = keydash;
     if (inp != "RC4"):
         while (True):
             print("Enter the IV :")
             keydash = input()
-            if (check_iv(inp,keydash)):
+            if (check_iv(inp, keydash)):
                 keydash = keydash.encode('utf-8')
                 break
-            else :
+            else:
                 print("Wrong IV. Kindly Try again.")
     dict["iv"] = keydash;
-    with open(keyFile,'wb') as fi:
-        pickle.dump(dict,fi)
+    with open(keyFile, 'wb') as fi:
+        pickle.dump(dict, fi)
     print("Key stored")
-    return inp,keyFile
+    return inp, keyFile
     pass
 
 
@@ -205,23 +205,23 @@ def take_key():
     while (True):
         print("Enter the key :")
         keydash = input()
-        if (check_key(inp,keydash)):
+        if (check_key(inp, keydash)):
             keydash = keydash.encode('utf-8')
             break
-        else :
+        else:
             print("Wrong key. Kindly Try again.")
     dict["key"] = keydash;
     if (inp != "RC4"):
         while (True):
             print("Enter the IV :")
             keydash = input()
-            if (check_key(inp,keydash)):
+            if (check_key(inp, keydash)):
                 keydash = keydash.encode('utf-8')
                 break
-            else :
+            else:
                 print("Wrong IV. Kindly Try again.")
     dict["iv"] = keydash;
-    return encryption_schema,dict
+    return encryption_schema, dict
 
 
 def new_user_key():
@@ -229,16 +229,16 @@ def new_user_key():
     if "Y" in ind.upper():
         dic = store_key()
         return dic
-    elif "N" in ind.upper() :
+    elif "N" in ind.upper():
         print("Specify Encryption : (One of AES, TripleDES, RC4)")
         while (True):
             inp = input();
             if (inp == "AES" or inp == "TripleDES" or inp == "RC4"):
                 break
             print("Invalid schema. Try again.")
-        return [inp,None]
+        return [inp, None]
     else:
-        print ("Invalid Input. Try again.")
+        print("Invalid Input. Try again.")
         new_user_key()
     pass
 
@@ -261,7 +261,7 @@ def get_en_key():
                 return set_key('encryption_schema', 'key')
                 break
     elif ('key' not in data):
-        return [data['encryption_schema'],None]
+        return [data['encryption_schema'], None]
     else:
         return [data['encryption_schema'], data['key']]
 
@@ -269,11 +269,11 @@ def get_en_key():
 def change():
     with tempfile.TemporaryDirectory() as dir1:
         try:
-            with open(config_file,'r') as fil:
+            with open(config_file, 'r') as fil:
                 data = json.load(fil)
                 if ('encryption_schema' not in data):
-                    print ("set some schema first")
-                    exit (0)
+                    print("set some schema first")
+                    exit(0)
             server_url = get_server_url()
             AuthKey = check_user_pass(server_url)
             [schema, en_key] = get_en_key()
@@ -283,7 +283,7 @@ def change():
             updateThread.setDaemon(True)
             updateThread.start()
             file_list = list((get_index(server_url, AuthKey)).keys())
-            download_files(server_url, AuthKey,file_list, dir1, token, schema, en_key)
+            download_files(server_url, AuthKey, file_list, dir1, token, schema, en_key)
             with open(config_file, 'r') as fil:
                 data = json.load(fil)
                 del data['encryption_schema']
@@ -295,7 +295,8 @@ def change():
             exit(0)
         except requests.exceptions.ConnectionError as e:
             logging.exception(e)
-            print("error: The server isn't responding. To change/set the server url, use\n\nspc server set_url <url:port>")
+            print(
+                "error: The server isn't responding. To change/set the server url, use\n\nspc server set_url <url:port>")
             exit(-1)
         with open(config_file, 'w') as fil:
             json.dump(data, fil)
@@ -305,7 +306,7 @@ def change():
                 while (True):
                     id = input("Do you wanna store the key ? Enter Yes or No :")
                     if "Y" in id.upper():
-                        schema,en_key = store_key()
+                        schema, en_key = store_key()
                         with open(config_file, 'r') as fil:
                             data = json.load(fil)
                         data['encryption_schema'] = schema;
@@ -325,9 +326,9 @@ def change():
                             data = json.load(fil)
                         data['encryption_schema'] = schema;
                         with open(config_file, 'w') as fil:
-                            json.dump(data,fil)
+                            json.dump(data, fil)
                         break
-                    else :
+                    else:
                         print("Try again")
                 break
             elif "N" in ind.upper():
@@ -338,6 +339,7 @@ def change():
         upload_files(server_url, AuthKey, dir1, newlist, token, schema, en_key)
         unlock_sync(server_url, AuthKey, token)
     pass
+
 
 # def change_file(dump_file):
 #     print("To change key you first need to sync your files")
@@ -374,7 +376,7 @@ def change():
 #     with open(dump_file,'rb') as file:
 #         dict = pickle.load(file)
 #     if (data.get(paramkey) == None):
-#         data[paramkey] = os.path.join(data["home_folder"],'key.key');
+#         data[paramkey] = os.path.join(data["home_dir"],'key.key');
 #     with open(data[paramkey],'wb') as f:
 #         pickle.dump(dict,f)
 #     with open(config_file, 'w') as fhand:
@@ -399,11 +401,12 @@ def print_key():
         exit(0)
     with open(data[paramkey], 'rb') as f:
         oldkey = pickle.load(f)
-        print ("Encryption Schema : "+data["encryption_schema"])
+        print("Encryption Schema : " + data["encryption_schema"])
         for x in oldkey.keys():
-            print (x)
-            print (oldkey[x])
+            print(x)
+            print(oldkey[x])
     pass
+
 
 class AuthenticationException(Exception):
     pass
@@ -411,6 +414,7 @@ class AuthenticationException(Exception):
 
 class NoHomeDirException(Exception):
     pass
+
 
 def sync():
     try:
@@ -435,14 +439,15 @@ def sync():
         exit(-1)
     except NoHomeDirException as e:
         logging.exception(e)
-        print("You have not set a home directory. Please point to a valid home directory using:\n\nspc observe <home-dir>")
+        print(
+            "You have not set a home directory. Please point to a valid home directory using:\n\nspc observe <home-dir>")
         exit(-1)
     except ConnectionRefusedError as e:
         logging.exception(e)
         print("error: The server isn't responding. To change/set the server url, use\n\nspc server set_url <url:port>")
         exit(-1)
     del_bool = delete_files(server_url, AuthKey, delete, token)
-    down_bool = download_files(server_url, AuthKey, download, home_dir,token,  schema, en_key)
+    down_bool = download_files(server_url, AuthKey, download, home_dir, token, schema, en_key)
     up_bool = upload_files(server_url, AuthKey, home_dir, upload, token, schema, en_key)
 
     if (delete and del_bool) and (download and down_bool) and (upload and up_bool):
@@ -563,6 +568,7 @@ def get_auth_key(server_url, username, password):
         raise AuthenticationException
     else:
         return AuthKey
+
 
 def config_edit(server_url=None):
     data = {}
@@ -722,7 +728,8 @@ def upload_files(server_url, AuthKey, home_dir, files, token, algorithm="AES", k
                 logging.warn(r.text)
             num -= 1
 
-    tqdm.write('\nUploaded ' + str(upload_success) + ' file(s) successfully. ' + str(upload_failed) + ' upload(s) failed.')
+    tqdm.write(
+        '\nUploaded ' + str(upload_success) + ' file(s) successfully. ' + str(upload_failed) + ' upload(s) failed.')
     if md5fail > 0:
         i = input(str(md5fail) + 'files uploaded incorrectly, would you like to retry sync? (MD5 checksum fail) [Y/n]')
         if i == 'y' or i == 'Y':
@@ -760,7 +767,7 @@ def download_files(server_url, AuthKey, file_list, home_dir, token, algorithm="A
             split_path = os.path.split(f)
 
             payLoad = {'file_path': split_path[0], 'name': split_path[1], 'token': token}
-            r = client.post(urlp.urljoin(server_url,'api/download/'), data=payLoad, headers=header, stream=True)
+            r = client.post(urlp.urljoin(server_url, 'api/download/'), data=payLoad, headers=header, stream=True)
 
             values, params = cgi.parse_header(r.headers['Content-Disposition'])
 
@@ -772,7 +779,6 @@ def download_files(server_url, AuthKey, file_list, home_dir, token, algorithm="A
 
             if not os.path.isdir(os.path.dirname(os.path.join(tempdir, f))):
                 pathlib.Path(os.path.dirname(os.path.join(tempdir, f))).mkdir(parents=True, exist_ok=True)
-
 
             home_dir = tempdir
             with open(os.path.join(home_dir, filename), 'wb') as xx:
@@ -811,11 +817,11 @@ def set_home_dir(parameter, dir, out):
         exit(-1)
 
 
-
-def empty_json(home_folder):
-    data = {"home_folder":home_folder}
+def empty_json(home_dir):
+    data = {"home_dir": home_dir}
     with open(config_file, 'w') as outfile:
         json.dump(data, outfile)
+
 
 def delete_files(server_url, AuthKey, file_list, token):
     if len(file_list) == 0:
@@ -860,29 +866,29 @@ def get_index(server_url, AuthKey):
     return index_dict
 
 
-def status ():
+def status():
     server_url = get_server_url()
     AuthKey = check_user_pass(server_url)
     home_dir = check_home_dir()
-    [modified, unmodified, cloud,local] = conflicts.get_status(get_index(server_url, AuthKey), home_dir)
-    print ("You have "+str(len(modified))+" modified files on the local directory along with "+str(len(local))+" new files and "+str(len(cloud))+" deleted files")
-    if (len(modified)>0):
-        print ("Modified: ")
+    [modified, unmodified, cloud, local] = conflicts.get_status(get_index(server_url, AuthKey), home_dir)
+    print("You have " + str(len(modified)) + " modified files on the local directory along with " + str(
+        len(local)) + " new files and " + str(len(cloud)) + " deleted files")
+    if (len(modified) > 0):
+        print("Modified: ")
         for x in modified:
-            print ("\t"+x)
-    if (len(cloud)>0):
-        print ("Deleted: ")
+            print("\t" + x)
+    if (len(cloud) > 0):
+        print("Deleted: ")
         for x in cloud:
-            print("\t"+x)
-    if (len(local)>0):
-        print ("New: ")
+            print("\t" + x)
+    if (len(local) > 0):
+        print("New: ")
         for x in local:
-            print("\t"+x)
+            print("\t" + x)
     pass
 
 
-
-if len(sys.argv) > 1 and len(sys.argv) < 3:
+if len(sys.argv) > 1 and len(sys.argv) <= 3:
     if sys.argv[1] == 'config':
         config_edit()
     elif sys.argv[1] == 'set_server':
@@ -912,4 +918,3 @@ if len(sys.argv) > 1 and len(sys.argv) < 3:
 else:
     print('Invalid number of arguments.')
     exit(-1)
-
