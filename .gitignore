@@ -1,0 +1,5 @@
+*/**/__pycache__
+linux_client/*.log
+db.sqlite3
+venv/
+__pycache__
